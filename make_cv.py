@@ -60,9 +60,6 @@ class PdfMaker(object):
                 self._fonts.append(t[0])
 
     def get_value(self, dct):
-        '''
-        与えられた辞書型のkey='value'を正規表現で確認し、「$」があったらstring.Templateで置き換える。
-        '''
         value = dct.get('value', '')
         s_values = re.search(r'\$(.*)$', value)
         if s_values:

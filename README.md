@@ -6,13 +6,13 @@ YAMLによる履歴書作成スクリプト Python
 このスクリプトは、[kaityo256](https://github.com/kaityo256)様がRuby言語で開発された
 [yaml_cv](https://github.com/kaityo256/yaml_cv)をPython言語に移植したものです。
 
-[yaml_cv](https://github.com/kaityo256/yaml_cv)の使用方法については、kaityo256様が[丁寧に分かりやすく解説](https://github.com/kaityo256/yaml_cv)して下さっております。
-本スクリプトも基本的に同様の仕様になるよう作成したつもりです。
+[yaml_cv](https://github.com/kaityo256/yaml_cv)の使用方法については、kaityo256様が[丁寧に分かりやすく解説](https://github.com/kaityo256/yaml_cv)して下さっております。  
+本スクリプトも基本的に同様の仕様になるよう作成したつもりです。  
 
 ### 移植元プログラム
-YAMLによる履歴書作成スクリプト
-https://github.com/kaityo256/yaml_cv
-Copyright (c) 2018 H. Watanabe
+YAMLによる履歴書作成スクリプト  
+https://github.com/kaityo256/yaml_cv  
+Copyright (c) 2018 H. Watanabe  
 
 ---
 
@@ -20,12 +20,12 @@ Copyright (c) 2018 H. Watanabe
 * [PyYAML](http://pyyaml.org/)
 * [reportlab](http://www.reportlab.com/)
 
-Windows10_Python3.6.5にて動作確認しました。
+Windows10_Python3.6.5にて動作確認しました。  
 
 ## 使い方
 
-以下のように、`-i`に続けてデータファイル、`-s`に続けてスタイルファイル、`-o`に続けて出力ファイルを指定します。
-省略した場合のデフォルトはそれぞれ`data.yaml`、`style.yaml`、`output.pdf`です。
+以下のように、`-i`に続けてデータファイル、`-s`に続けてスタイルファイル、`-o`に続けて出力ファイルを指定します。  
+省略した場合のデフォルトはそれぞれ`data.yaml`、`style.yaml`、`output.pdf`です。  
 
 ```
 $ python make_cv.py -h
@@ -51,7 +51,7 @@ $ python make_cv.py -i data.yaml -s style.txt -o output.pdf
 
 
 ## 補足
-本件はPython初心者＋Ruby未経験というド素人が自身の勉強の為に行ったものです。
+本件はPython初心者＋Ruby未経験というド素人が自身の勉強の為に行ったものです。  
 大変拙い移植になっていると思いますがご了承ください。
 
 ## Special thanks

@@ -1,0 +1,89 @@
+# 名前等
+date: 2018年 6月 23日現在
+name_kana: リレキショ　タロウ
+name: 履歴書　太郎
+birth_day: 1989年9月31日 (満 28 歳)
+gender: 男
+cell_phone: 090-1234-XXXX
+email: hoge@fuga.org
+
+# 住所
+address_kana: トウキョウト チヨダク チヨダ
+address: 東京都千代田区千代田X-X-X
+address_zip: 100-0001
+tel: 03-123-XXX
+fax: 03-123-XXX
+# 連絡先
+address_kana2: トウキョウト アラカワク アラカワ
+address2: 東京都 荒川区 荒川X-X-X
+address_zip2: 116-0002
+tel2: 03-123-XXX
+fax2: 03-123-XXX
+
+# 学歴
+education:
+  -
+    year: 20XX
+    month: 4
+    value: 東京都立〇〇高等学校 入学
+  -
+    year: 20XX
+    month: 3
+    value: 同 卒業
+  -
+    year: 20XX
+    month: 4
+    value: 〇〇大学△△学部 入学
+  -
+    year: 20XX
+    month: 3
+    value: 同 卒業
+
+
+# 職歴
+experience:
+  -
+    year: 20XX
+    month: 4
+    value: 株式会社□□入社
+  -
+    year: 20XX
+    month: 10
+    value: 株式会社□□退職
+  -
+    year: 20XX
+    month: 10
+    value: 株式会社〇〇 入社
+  -
+    value: 現在にいたる
+
+# 免許・資格
+licences:
+  -
+    year: 20XX
+    month: 6
+    value: 普通自動車免許
+  -
+    year: 20XX
+    month: 6
+    value: 〇〇検定1級
+
+
+# 通勤時間
+commuting_time:  1時間30分
+
+#扶養家族数(配偶者を除く)
+dependents: ３人
+
+# 趣味
+hobby: |
+  趣味は水泳です。
+  現在も週に2回は地元のプールへ泳ぎに行っています。
+  お菓子作りも好きです。
+# 志望動機
+motivation: |
+  〇〇〇という貴社の方針に魅力を感じたからです。
+# 本人希望記入欄
+request: |
+  特にありません。
+  貴社の規定に従います。

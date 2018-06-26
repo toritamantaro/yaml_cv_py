@@ -32,8 +32,8 @@ DEFAULT_LINE_WIDTH = 0.5
 
 class PdfMaker(object):
     def __init__(self):
-        self._input_data = None
-        self._canvas = None  # reportlab.pdfgen.canvas
+        self._input_data = ...
+        self._canvas = ...  # reportlab.pdfgen.canvas
         self._fonts = []  # 登録したフォント名
 
         # ReprotLabで用意されている日本語フォントを登録する

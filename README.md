@@ -13,7 +13,7 @@ YAMLによる履歴書作成スクリプト Python
 * [PyYAML](http://pyyaml.org/)
 * [reportlab](http://www.reportlab.com/)
 
-Windows10_Python3.6.5にて動作確認しました。  
+Windows10_Python3.6.4, PyYAML==5.3.1, reprotlab==3.5.42 にて動作確認しました。  
 
 ## 使い方
 

@@ -273,7 +273,7 @@ class PdfMaker(object):
                   "現在のファイル名：{0}".format(input_file))
             return
         with codecs.open(input_file, 'r', 'utf-8') as yaml_file:
-            self._input_data = yaml.load(yaml_file)
+            self._input_data = yaml.load(yaml_file, Loader=yaml.SafeLoader)
 
         # PDFファイルの生成
         if not re.search(r'\.PDF$', output_file.upper()):
@@ -294,7 +294,7 @@ class PdfMaker(object):
             data = converter.convert(style_file)
         elif re.search(r'\.(YAML|YML)$', style_file.upper()):
             with codecs.open(style_file, 'r', 'utf-8') as yaml_file:
-                data = yaml.load(yaml_file)
+                data = yaml.load(yaml_file, Loader=yaml.SafeLoader)
         else:
             print("ファイル名：{0}の読み込みに失敗しました。".format(style_file))
             return

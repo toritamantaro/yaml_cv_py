@@ -13,7 +13,7 @@
   line_style: dashed
   type: box
   width: 30mm
-  x: 144mm
+  x: 143mm
   y: 204mm
 - font_size: '8'
   type: string
@@ -59,11 +59,11 @@
     y: 0mm
   - x: 0mm
     y: -38mm
-  - x: 36.5mm
+  - x: 35.5mm
     y: 0mm
   - x: 0mm
     y: -52mm
-  - x: -175.5mm
+  - x: -174.5mm
     y: 0mm
   type: lines
 - dx: 139mm
@@ -174,7 +174,7 @@
   type: line
   x: 0.5mm
   y: 193mm
-- dx: 175.5mm
+- dx: 174.5mm
   dy: '0'
   type: line
   x: 0.5mm
@@ -190,7 +190,7 @@
   type: line
   x: 139.5mm
   y: 200mm
-- dx: 36.5mm
+- dx: 35.5mm
   dy: 0mm
   line_style: dashed
   type: line
@@ -236,7 +236,7 @@
   value: $fax2
   x: 145mm
   y: 152mm
-- dx: 36.5mm
+- dx: 35.5mm
   dy: 0mm
   line_style: dashed
   type: line
@@ -300,10 +300,10 @@
 - height: 119mm
   line_width: '1.5'
   type: box
-  width: 175.5mm
+  width: 174.5mm
   x: 0.5mm
   y: 17mm
-- dx: 175.5mm
+- dx: 174.5mm
   dy: '0'
   num: '16'
   sx: '0'
@@ -360,7 +360,7 @@
 - height: 49mm
   line_width: '1.5'
   type: box
-  width: 175.5mm
+  width: 174.5mm
   x: 0.5mm
   y: 190mm
 - dx: '0'
@@ -374,7 +374,7 @@
   type: line
   x: 32mm
   y: 239mm
-- dx: 175.5mm
+- dx: 174.5mm
   dy: '0'
   num: '6'
   sx: '0'
@@ -408,7 +408,7 @@
 - height: 15mm
   line_width: '1.5'
   type: box
-  width: 175.5mm
+  width: 174.5mm
   x: 0.5mm
   y: 167mm
 - font_size: '9'
@@ -474,7 +474,7 @@
 - height: 40mm
   line_width: '1.5'
   type: box
-  width: 175.5mm
+  width: 174.5mm
   x: 0.5mm
   y: 120mm
 - font_size: '9'
@@ -492,7 +492,7 @@
 - height: 40mm
   line_width: '1.5'
   type: box
-  width: 175.5mm
+  width: 174.5mm
   x: 0.5mm
   y: 73mm
 - font_size: '9'
@@ -510,7 +510,7 @@
 - height: 40mm
   line_width: '1.5'
   type: box
-  width: 175.5mm
+  width: 174.5mm
   x: 0.5mm
   y: 26mm
 - font_size: '9'

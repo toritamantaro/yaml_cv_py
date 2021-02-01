@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+from typing import Dict, Tuple, Any
 import re
 import string
 import ast
@@ -6,7 +8,6 @@ import codecs
 import argparse
 
 import yaml
-
 from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.cidfonts import UnicodeCIDFont
@@ -32,8 +33,8 @@ DEFAULT_LINE_WIDTH = 0.5
 
 class PdfMaker(object):
     def __init__(self):
-        self._input_data = ...
-        self._canvas = ...  # reportlab.pdfgen.canvas
+        self._input_data = None
+        self._canvas = None  # reportlab.pdfgen.canvas
         self._fonts = []  # 登録したフォント名
 
         # ReprotLabで用意されている日本語フォントを登録する
@@ -42,7 +43,7 @@ class PdfMaker(object):
         self._fonts = ['HeiseiKakuGo-W5', 'HeiseiMin-W3']
         self.check_font(DEPENDENT_FONT_FILE)
 
-    def check_font(self, font_file):
+    def check_font(self, font_file: Tuple[Tuple[str]]):
         '''
         任意のフォントファイルを登録する
         :param font_file:
@@ -50,7 +51,7 @@ class PdfMaker(object):
         e.g. (('msmincho', 'msmincho.ttc'), ... ,('msmincho', 'msmincho.ttc'))
         '''
         for t in font_file:
-            if (not isinstance(t, tuple)) or len(t) < 2:
+            if (not isinstance(t, Tuple)) or len(t) < 2:
                 continue
             try:
                 pdfmetrics.registerFont(TTFont(t[0], t[1]))
@@ -59,8 +60,8 @@ class PdfMaker(object):
             else:
                 self._fonts.append(t[0])
 
-    def get_value(self, dct):
-        value = dct.get('value', '')
+    def get_value(self, params: Dict) -> str:
+        value = params.get('value', '')
         s_values = re.search(r'\$(.*)$', value)
         if s_values:
             key = s_values.group(1)
@@ -70,59 +71,59 @@ class PdfMaker(object):
             value = t.substitute(**{key: val})
         return value
 
-    def get_font(self, dct):
-        font_size = float(dct.get('font_size', DEFAULT_FONT_SIZE))
-        font_face = dct.get('font_face', DEFAULT_FONT_FACE)
+    def get_font(self, params: Dict) -> Tuple[float, str]:
+        font_size = float(params.get('font_size', DEFAULT_FONT_SIZE))
+        font_face = params.get('font_face', DEFAULT_FONT_FACE)
         if font_face not in self._fonts:
             face = DEFAULT_FONT_FACE if (DEFAULT_FONT_FACE in self._fonts) else self._fonts[0]
             print("フォント名'{}'は指定できません。'{}'が適用されます。".format(font_face, face))
             font_face = face
-        return font_size, font_face
+        return float(font_size), font_face
 
-    def put_string(self, x, y, str, font_size, font_face):
-        if str == '':
+    def put_string(self, x: float, y: float, char: str, font_size: float, font_face: str):
+        if not char:
             return
         self._canvas.setFont(font_face, font_size)
-        self._canvas.drawString(x, y, str)
+        self._canvas.drawString(x, y, char)
 
-    def put_textbox(self, x, y, str, font_size, font_face):
-        if str == '':
+    def put_textbox(self, x: float, y: float, char: str, font_size: float, font_face: str):
+        if not char:
             return
         text_obj = self._canvas.beginText()
         text_obj.setTextOrigin(x, y)
         text_obj.setFont(font_face, font_size)
-        text_obj.textLines(str)
+        text_obj.textLines(char)
         self._canvas.drawText(text_obj)
 
-    def string(self, dct):
-        x = self.unit2dot(dct.get('x'))
-        y = self.unit2dot(dct.get('y'))
-        value = self.get_value(dct)
-        font_size, font_face = self.get_font(dct)
+    def string(self, params: Dict):
+        x = self.unit2dot(params.get('x'))
+        y = self.unit2dot(params.get('y'))
+        value = self.get_value(params)
+        font_size, font_face = self.get_font(params)
         self.put_string(x, y, value, font_size, font_face)
 
-    def box(self, dct):
-        self.line_style(dct)
-        x = self.unit2dot(dct.get('x'))
-        y = self.unit2dot(dct.get('y'))
-        w = self.unit2dot(dct.get('width'))
-        h = self.unit2dot(dct.get('height'))
+    def box(self, params: Dict):
+        self.line_style(params)
+        x = self.unit2dot(params.get('x'))
+        y = self.unit2dot(params.get('y'))
+        w = self.unit2dot(params.get('width'))
+        h = self.unit2dot(params.get('height'))
         self._canvas.rect(x, y, w, h)
 
-    def line(self, dct):
-        self.line_style(dct)
-        x = self.unit2dot(dct.get('x'))
-        y = self.unit2dot(dct.get('y'))
-        dx = self.unit2dot(dct.get('dx'))
-        dy = self.unit2dot(dct.get('dy'))
+    def line(self, params: Dict):
+        self.line_style(params)
+        x = self.unit2dot(params.get('x'))
+        y = self.unit2dot(params.get('y'))
+        dx = self.unit2dot(params.get('dx'))
+        dy = self.unit2dot(params.get('dy'))
         self._canvas.line(x, y, x + dx, y + dy)
 
-    def lines(self, dct):
-        self.line_style(dct)
-        points = dct.get('points')
+    def lines(self, params: Dict):
+        self.line_style(params)
+        points = params.get('points')
         x = self.unit2dot(points[0].get('x'))
         y = self.unit2dot(points[0].get('y'))
-        close = dct.get('close')
+        close = params.get('close')
         path = self._canvas.beginPath()  # 描画用のパスを生成
         path.moveTo(x, y)
         for dct in points[1:]:
@@ -136,34 +137,34 @@ class PdfMaker(object):
             path.close()
         self._canvas.drawPath(path)
 
-    def multi_lines(self, dct):
-        self.line_style(dct)
-        x = self.unit2dot(dct.get('x'))
-        y = self.unit2dot(dct.get('y'))
-        dx = self.unit2dot(dct.get('dx'))
-        dy = self.unit2dot(dct.get('dy'))
-        sx = self.unit2dot(dct.get('sx'))
-        sy = self.unit2dot(dct.get('sy'))
-        num = int(dct.get('num'))
+    def multi_lines(self, params: Dict):
+        self.line_style(params)
+        x = self.unit2dot(params.get('x'))
+        y = self.unit2dot(params.get('y'))
+        dx = self.unit2dot(params.get('dx'))
+        dy = self.unit2dot(params.get('dy'))
+        sx = self.unit2dot(params.get('sx'))
+        sy = self.unit2dot(params.get('sy'))
+        num = int(params.get('num'))
         self._canvas.line(x, y, x + dx, y + dy)
         for i in range(num):
             self._canvas.line(x, y, x + dx, y + dy)
             x = x + sx
             y = y + sy
 
-    def line_style(self, dct):
+    def line_style(self, params: Dict):
         # 線のスタイル
         line_styles = {
             'dashed': [2, 2],  # 線と間隔の長さを任意に定義
             'chain': [2, 2, 10, 2],  # 線と間隔の長さを任意に定義
             'solid': [],  # 空のリスト -> 実線
         }
-        style = dct.get('line_style', '')
+        style = params.get('line_style', '')
         style_lst = line_styles.get(style, [])  # 対応するキーがない場合は空のリストを渡す -> 実線
         self._canvas.setDash(style_lst)
 
         # 線の幅
-        width = dct.get('line_width')
+        width = params.get('line_width')
         try:
             width = float(width)
         except:
@@ -171,7 +172,7 @@ class PdfMaker(object):
 
         self._canvas.setLineWidth(width)
 
-    def unit2dot(self, s):
+    def unit2dot(self, s: Any) -> float:
         '''
         「数値+単位」（文字列型）で指定された値をドットに変換する
         '''
@@ -195,21 +196,21 @@ class PdfMaker(object):
             except TypeError:
                 return None
 
-    def new_page(self, dct):
+    def new_page(self, params: Dict = None):
         self._canvas.showPage()  # これまでのページを確定
 
     def save(self):
         self._canvas.save()
 
-    def education_experience(self, dct):
-        y = self.unit2dot(dct.get('y'))
-        year_x = self.unit2dot(dct.get('year_x'))
-        month_x = self.unit2dot(dct.get('month_x'))
-        value_x = self.unit2dot(dct.get('value_x'))
-        ijo_x = self.unit2dot(dct.get('ijo_x'))
-        dy = self.unit2dot(dct.get('dy'))
-        caption_x = self.unit2dot(dct.get('caption_x'))
-        font_size, font_face = self.get_font(dct)
+    def education_experience(self, params: Dict):
+        y = self.unit2dot(params.get('y'))
+        year_x = self.unit2dot(params.get('year_x'))
+        month_x = self.unit2dot(params.get('month_x'))
+        value_x = self.unit2dot(params.get('value_x'))
+        ijo_x = self.unit2dot(params.get('ijo_x'))
+        dy = self.unit2dot(params.get('dy'))
+        caption_x = self.unit2dot(params.get('caption_x'))
+        font_size, font_face = self.get_font(params)
         # 学歴
         self.put_string(caption_x, y, '学歴', font_size, font_face)
         y = y - dy
@@ -237,14 +238,14 @@ class PdfMaker(object):
         # 以上
         self.put_string(ijo_x, y, '以上', font_size, font_face)
 
-    def license_certification(self, dct):
-        y = self.unit2dot(dct.get('y'))
-        year_x = self.unit2dot(dct.get('year_x'))
-        month_x = self.unit2dot(dct.get('month_x'))
-        value_x = self.unit2dot(dct.get('value_x'))
-        dy = self.unit2dot(dct.get('dy'))
-        value = self.get_value(dct)
-        font_size, font_face = self.get_font(dct)
+    def license_certification(self, params: Dict):
+        y = self.unit2dot(params.get('y'))
+        year_x = self.unit2dot(params.get('year_x'))
+        month_x = self.unit2dot(params.get('month_x'))
+        value_x = self.unit2dot(params.get('value_x'))
+        dy = self.unit2dot(params.get('dy'))
+        value = self.get_value(params)
+        font_size, font_face = self.get_font(params)
         try:
             data_dcts = ast.literal_eval(value)  # 文字列を辞書型に変換
         except ValueError:
@@ -259,14 +260,14 @@ class PdfMaker(object):
             self.put_string(value_x, y, str(d.get('value', '')), font_size, font_face)
             y = y + dy
 
-    def textbox(self, dct):
-        x = self.unit2dot(dct.get('x'))
-        y = self.unit2dot(dct.get('y'))
-        value = self.get_value(dct)
-        font_size, font_face = self.get_font(dct)
+    def textbox(self, params: Dict):
+        x = self.unit2dot(params.get('x'))
+        y = self.unit2dot(params.get('y'))
+        value = self.get_value(params)
+        font_size, font_face = self.get_font(params)
         self.put_textbox(x, y, value, font_size, font_face)
 
-    def generate(self, input_file, style_file, output_file):
+    def generate(self, input_file: str, style_file: str, output_file: str):
         # 記述内容の読み込み
         if not re.search(r'\.(YAML|YML)$', input_file.upper()):
             print("ファイル名の拡張子は「*.yaml」もしくは「*.yml」にしてください。"

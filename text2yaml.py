@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import csv
+from typing import Dict, List
 import re
+import csv
 import argparse
 import codecs
 
@@ -9,7 +10,7 @@ import yaml
 
 
 class TextConverter(object):
-    def store_in_dct(self, lst, dct):
+    def store_in_dct(self, lst: List, dct: Dict):
         '''
         :param lst: e.g. [ ... , 'line_width=1.5']
         :param dct:　格納先の辞書型
@@ -19,7 +20,7 @@ class TextConverter(object):
                 spl = str.split('=')
                 dct[spl[0]] = spl[1]
 
-    def string(self, lst):
+    def string(self, lst: List) -> Dict:
         '''
         :param lst: e.g. ['string', '5mm', '170mm', '$commuting_time', 'font_size=12']
         '''
@@ -31,7 +32,7 @@ class TextConverter(object):
         self.store_in_dct(lst, dct)
         return dct
 
-    def box(self, lst):
+    def box(self, lst: List) -> Dict:
         '''
         :param lst: e.g. ['box', '0.5mm', '17mm', '175.5mm', '119mm', 'line_width=1.5']
         '''
@@ -44,7 +45,7 @@ class TextConverter(object):
         self.store_in_dct(lst, dct)
         return dct
 
-    def line(self, lst):
+    def line(self, lst: List) -> Dict:
         '''
         1本線描画
         :param lst: e.g. ['line', '100mm', '214mm', '0mm', '-14mm', 'line_style=dashed']
@@ -58,7 +59,7 @@ class TextConverter(object):
         self.store_in_dct(lst, dct)
         return dct
 
-    def lines(self, lst):
+    def lines(self, lst: List) -> Dict:
         '''
         ポリライン描画
         :param lst: e.g.
@@ -77,7 +78,7 @@ class TextConverter(object):
         self.store_in_dct(lst, dct)
         return dct
 
-    def multi_lines(self, lst):
+    def multi_lines(self, lst: List) -> Dict:
         '''
         複数の平行線
         :param lst: e.g. ['multi_lines', '0.5mm', '24mm', '175.5mm', '0', '16', '0', '7mm']
@@ -93,13 +94,13 @@ class TextConverter(object):
         dct['sy'] = lst.pop(0)
         return dct
 
-    def new_page(self, lst):
+    def new_page(self, lst: List = None) -> Dict:
         '''
         :param lst: e.g. ['new_page']
         '''
         return {'type': 'new_page'}
 
-    def education_experience(self, lst):
+    def education_experience(self, lst: List) -> Dict:
         '''
         :param lst: e.g.
         ['education_experience', '124mm', '5mm', '25mm', '35mm', '7mm', '95mm', '155mm', 'font_size=12']
@@ -116,7 +117,7 @@ class TextConverter(object):
         self.store_in_dct(lst, dct)
         return dct
 
-    def license_certification(self, lst):
+    def license_certification(self, lst: List) -> Dict:
         '''
         :param lst: e.g.
         ['license_certification', '227mm', '5mm', '25mm', '35mm', '-7mm', '$licences', 'font_size=12']
@@ -132,7 +133,7 @@ class TextConverter(object):
         self.store_in_dct(lst, dct)
         return dct
 
-    def textbox(self, lst):
+    def textbox(self, lst: List) -> Dict:
         '''
         :param lst: e.g. ['textbox', '2mm', '148mm', '173mm', '30mm', '$hobby', 'font_size=13']
         '''
@@ -146,7 +147,7 @@ class TextConverter(object):
         self.store_in_dct(lst, dct)
         return dct
 
-    def convert(self, file_name):
+    def convert(self, file_name: str) -> List:
         lst = []
         if not re.search(r'\.(TXT|CSV)$', file_name.upper()):
             print("ファイル名の拡張子は「*.txt」もしくは「*.csv」にしてください。"
@@ -173,7 +174,7 @@ class TextConverter(object):
 
 
 class Txt2Yaml(TextConverter):
-    def generate(self, input_file, output_file):
+    def generate(self, input_file: str, output_file: str):
         data = []
         data = self.convert(input_file)
 

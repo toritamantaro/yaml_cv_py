@@ -1,3 +1,5 @@
+.github
+.gitignore
 *.pyc
 *.pyo
 __pycache__

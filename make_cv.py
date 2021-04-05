@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from typing import Dict, Tuple, Any
+from typing import Dict, Tuple, Any, Optional
 import re
 import string
 import ast
@@ -32,7 +32,7 @@ DEFAULT_LINE_WIDTH = 0.5
 
 
 class PdfMaker(object):
-    def __init__(self):
+    def __init__(self, add_font: Optional[Tuple[str]]):
         self._input_data = None
         self._canvas = None  # reportlab.pdfgen.canvas
         self._fonts = []  # 登録したフォント名
@@ -42,6 +42,8 @@ class PdfMaker(object):
         pdfmetrics.registerFont(UnicodeCIDFont("HeiseiMin-W3"))
         self._fonts = ['HeiseiKakuGo-W5', 'HeiseiMin-W3']
         self.check_font(DEPENDENT_FONT_FILE)
+        if add_font:
+            self.register_font(add_font)
 
     def check_font(self, font_file: Tuple[Tuple[str]]):
         '''
@@ -53,12 +55,15 @@ class PdfMaker(object):
         for t in font_file:
             if (not isinstance(t, Tuple)) or len(t) < 2:
                 continue
-            try:
-                pdfmetrics.registerFont(TTFont(t[0], t[1]))
-            except TTFError:
-                print("フォント名:'{0}'_フォントファイル:'{1}'の登録に失敗しました。".format(t[0], t[1]))
-            else:
-                self._fonts.append(t[0])
+            self.register_font(t)
+
+    def register_font(self, font_info: Tuple[str]):
+        try:
+            pdfmetrics.registerFont(TTFont(font_info[0], font_info[1]))
+        except TTFError:
+            print("フォント名:'{0}'_フォントファイル:'{1}'の登録に失敗しました。".format(font_info[0], font_info[1]))
+        else:
+            self._fonts.append(font_info[0])
 
     def get_value(self, params: Dict) -> str:
         value = params.get('value', '')
@@ -322,6 +327,8 @@ def parse_option():
     parser.add_argument('-o', action='store', type=str, dest='output',
                         default='output.pdf',
                         help='set output file path.  e.g. hoge.pdf')
+    parser.add_argument('-f', action='store', type=str, dest='font', nargs=2,
+                        help='set font name and font file.  e.g. msgothic msgothic.ttc')
     return parser.parse_args()
 
 
@@ -330,8 +337,9 @@ def main():
     input_file = args.input
     style_file = args.style
     output_file = args.output
+    font_file_info = tuple(args.font) if args.font else None
 
-    maker = PdfMaker()
+    maker = PdfMaker(add_font=font_file_info)
     maker.generate(input_file, style_file, output_file)
 
 

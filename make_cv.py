@@ -42,7 +42,7 @@ class PdfMaker(object):
         pdfmetrics.registerFont(UnicodeCIDFont("HeiseiMin-W3"))
         self._fonts = ['HeiseiKakuGo-W5', 'HeiseiMin-W3']
         self.check_font(DEPENDENT_FONT_FILE)
-        if add_font:
+        if add_font is not None:
             self.register_font(add_font)
 
     def check_font(self, font_file: Tuple[Tuple[str]]):
@@ -337,7 +337,7 @@ def main():
     input_file = args.input
     style_file = args.style
     output_file = args.output
-    font_file_info = tuple(args.font) if args.font else None
+    font_file_info = None if args.font is None else tuple(args.font)
 
     maker = PdfMaker(add_font=font_file_info)
     maker.generate(input_file, style_file, output_file)
